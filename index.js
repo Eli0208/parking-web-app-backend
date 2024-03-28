@@ -1,11 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const carRoute = require("./routes/car.js");
-const logRoute = require("./routes/log.js"); // Import log routes
+const logRoute = require("./routes/log.js");
 const mongoose = require("mongoose");
 
 const app = express();
-const port = 5000; // You can choose any port you prefer
+const port = 5000;
 
 // Middleware
 app.use(cors());
