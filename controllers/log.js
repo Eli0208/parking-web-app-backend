@@ -4,7 +4,6 @@ const Car = require("../models/car.js");
 
 // Controller function to log time in
 const logTimeIn = async (req, res) => {
-  console.log("test");
   const { rfid } = req.body;
 
   try {
@@ -65,4 +64,15 @@ const logTimeOut = async (req, res) => {
   }
 };
 
-module.exports = { logTimeIn, logTimeOut };
+const getAllLogs = async (req, res) => {
+  try {
+    // Find all logs in the database
+    const logs = await Car.find();
+
+    res.json(logs); // Send the logs as JSON response
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+    res.status(500).json({ message: "Internal Server Error" }); // Handle error scenarios
+  }
+};
+module.exports = { logTimeIn, logTimeOut, getAllLogs };

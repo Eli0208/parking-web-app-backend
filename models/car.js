@@ -44,6 +44,11 @@ const carSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    minlength: 8, // Example length, adjust as needed
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false, // Default value for isAdmin is false
   },
   loginStatus: {
     type: Boolean,
@@ -65,7 +70,7 @@ carSchema.pre("save", async function (next) {
     this.password = hash;
     next();
   } catch (error) {
-    return next(error);
+    return next(error); // Pass error to the next middleware
   }
 });
 
