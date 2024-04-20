@@ -78,18 +78,17 @@ const getAllLogs = async (req, res) => {
 
 const getAllLogsByDate = async (req, res) => {
   try {
-    const { date } = req.params; // Use req.params instead of req.query to get the date from the route parameter
-
-    // Construct date range for the whole day
+    const { date } = req.params;
     const startDate = new Date(date);
+    startDate.setHours(0, 0, 0, 0); // Set the time to the beginning of the day
     const endDate = new Date(date);
-    endDate.setDate(endDate.getDate() + 1); // Increment the endDate by 1 to include the entire day
+    endDate.setHours(23, 59, 59, 999); // Set the time to the end of the day
 
     // Find logs within the date range
     const logs = await Car.find({
       $or: [
-        { "timeIn.date": { $gte: startDate, $lt: endDate } },
-        { "timeOut.date": { $gte: startDate, $lt: endDate } },
+        { "timeIn.date": { $gte: startDate, $lte: endDate } }, // Use $lte (less than or equal) for the end date
+        { "timeOut.date": { $gte: startDate, $lte: endDate } }, // Use $lte (less than or equal) for the end date
       ],
     });
 
