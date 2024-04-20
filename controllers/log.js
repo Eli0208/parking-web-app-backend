@@ -75,4 +75,29 @@ const getAllLogs = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" }); // Handle error scenarios
   }
 };
-module.exports = { logTimeIn, logTimeOut, getAllLogs };
+
+const getAllLogsByDate = async (req, res) => {
+  try {
+    const { date } = req.params; // Use req.params instead of req.query to get the date from the route parameter
+
+    // Construct date range for the whole day
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    endDate.setDate(endDate.getDate() + 1); // Increment the endDate by 1 to include the entire day
+
+    // Find logs within the date range
+    const logs = await Car.find({
+      $or: [
+        { "timeIn.date": { $gte: startDate, $lt: endDate } },
+        { "timeOut.date": { $gte: startDate, $lt: endDate } },
+      ],
+    });
+
+    res.json(logs);
+  } catch (error) {
+    console.error("Error fetching logs by date:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { logTimeIn, logTimeOut, getAllLogs, getAllLogsByDate };

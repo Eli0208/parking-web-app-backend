@@ -1,8 +1,11 @@
+//gate-modified index.js
+
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const carRoute = require("./routes/car.js");
 const logRoute = require("./routes/log.js");
+const gateRoute = require("./routes/gate.js");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -31,7 +34,8 @@ mongoose
 
 // Routes
 app.use("/cars", carRoute);
-app.use("/logs", logRoute); // Use log routes
+app.use("/logs", logRoute);
+app.use("/operations", gateRoute);
 
 // Start the server
 app.listen(port, () => {

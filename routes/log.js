@@ -2,7 +2,12 @@
 
 const express = require("express");
 const router = express.Router();
-const { logTimeIn, logTimeOut, getAllLogs } = require("../controllers/log.js");
+const {
+  logTimeIn,
+  logTimeOut,
+  getAllLogs,
+  getAllLogsByDate,
+} = require("../controllers/log.js");
 
 // Route to log time in
 router.post("/time-in", logTimeIn);
@@ -10,5 +15,6 @@ router.post("/time-in", logTimeIn);
 // Route to log time out
 router.post("/time-out", logTimeOut);
 router.get("/", getAllLogs);
+router.get("/date/:date", getAllLogsByDate);
 
 module.exports = router;
