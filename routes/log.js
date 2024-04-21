@@ -15,6 +15,6 @@ router.post("/time-in", logTimeIn);
 // Route to log time out
 router.post("/time-out", logTimeOut);
 router.get("/", getAllLogs);
-router.get("/date/:date", getAllLogsByDate);
+router.get("/date/:startDate/:endDate", getAllLogsByDate);
 
 module.exports = router;

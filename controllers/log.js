@@ -78,23 +78,28 @@ const getAllLogs = async (req, res) => {
 
 const getAllLogsByDate = async (req, res) => {
   try {
-    const { date } = req.params;
-    const startDate = new Date(date);
-    startDate.setHours(0, 0, 0, 0); // Set the time to the beginning of the day
-    const endDate = new Date(date);
-    endDate.setHours(23, 59, 59, 999); // Set the time to the end of the day
+    const { startDate, endDate } = req.params;
+
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+
+    // Set the time to the beginning of the start date
+    parsedStartDate.setHours(0, 0, 0, 0);
+
+    // Set the time to the end of the end date
+    parsedEndDate.setHours(23, 59, 59, 999);
 
     // Find logs within the date range
     const logs = await Car.find({
       $or: [
-        { "timeIn.date": { $gte: startDate, $lte: endDate } }, // Use $lte (less than or equal) for the end date
-        { "timeOut.date": { $gte: startDate, $lte: endDate } }, // Use $lte (less than or equal) for the end date
+        { "timeIn.date": { $gte: parsedStartDate, $lte: parsedEndDate } },
+        { "timeOut.date": { $gte: parsedStartDate, $lte: parsedEndDate } },
       ],
     });
 
     res.json(logs);
   } catch (error) {
-    console.error("Error fetching logs by date:", error);
+    console.error("Error fetching logs by date range:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
