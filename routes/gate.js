@@ -2,14 +2,19 @@
 const express = require("express");
 const router = express.Router();
 
-const { freeGate, useGate, checkGate, newGate } = require("../controllers/gate");
+const {
+  freeGate,
+  useGate,
+  checkGate,
+  newGate,
+} = require("../controllers/gate");
 
-router.get("/useGate", useGate);
+router.get("/usegate", useGate);
 
-router.get("/freeGate", freeGate);
+router.get("/freegate", freeGate);
 
-router.get("/checkGate", checkGate);
+router.get("/checkgate", checkGate);
 
-router.post('/post', newGate);
+router.post("/post", newGate);
 
 module.exports = router;
