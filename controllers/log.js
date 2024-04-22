@@ -26,7 +26,7 @@ const logTimeIn = async (req, res) => {
     car.loginStatus = true;
     await car.save();
 
-    res.json(car.ownerName);
+    res.send(car.ownerName);
   } catch (error) {
     console.error("Error logging time in:", error);
     res.status(500).send("Internal Server Error");
@@ -57,7 +57,7 @@ const logTimeOut = async (req, res) => {
     car.loginStatus = false;
     await car.save();
 
-    res.json(car);
+    res.send(car.ownerName);
   } catch (error) {
     console.error("Error logging time out:", error);
     res.status(500).send("Internal Server Error");
