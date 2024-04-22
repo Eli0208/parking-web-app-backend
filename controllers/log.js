@@ -11,7 +11,7 @@ const logTimeIn = async (req, res) => {
     const car = await Car.findOne({ rfid });
 
     if (!car) {
-      return res.status(404).send("No car found for the given RFID");
+      return res.status(404).send("Vehicle not registered/Invalid tag");
     }
 
     if (car.loginStatus) {
