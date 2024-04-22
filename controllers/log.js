@@ -26,7 +26,7 @@ const logTimeIn = async (req, res) => {
     car.loginStatus = true;
     await car.save();
 
-    res.json(car);
+    res.json(car.ownerName);
   } catch (error) {
     console.error("Error logging time in:", error);
     res.status(500).send("Internal Server Error");
