@@ -44,7 +44,6 @@ const carSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 8, // Example length, adjust as needed
   },
   isAdmin: {
     type: Boolean,
@@ -56,6 +55,15 @@ const carSchema = new mongoose.Schema({
   },
   timeIn: [timeSchema],
   timeOut: [timeSchema],
+  department: {
+    type: String,
+    required: true,
+  },
+  position: {
+    type: String,
+    required: true,
+    enum: ["Teaching", "Non-Teaching", "Admin"], // Restricting to specific values
+  },
 });
 
 // Middleware to hash password before saving

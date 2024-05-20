@@ -12,12 +12,11 @@ const registerCar = async (req, res) => {
     model,
     color,
     password,
+    department, // New field
+    position, // New field
   } = req.body;
 
   try {
-    // Hash the password before saving it to the database
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
     const newCar = new Car({
       rfid,
       ownerName,
@@ -26,15 +25,15 @@ const registerCar = async (req, res) => {
       brand,
       model,
       color,
-      password: hashedPassword,
+      password,
+      department, // Include the new field
+      position, // Include the new field
     });
+    console.log("test");
+    await newCar.save();
 
-    const savedCar = await newCar.save();
-
-    console.log("New car registered:", savedCar);
     res.send("Car registered successfully!");
   } catch (error) {
-    console.error("Error registering car:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -52,21 +51,24 @@ const getCars = async (req, res) => {
 
 const login = async (req, res) => {
   const { ownersEmail, password } = req.body;
-  const car = await Car.findOne({ ownersEmail });
-  if (car == null) {
-    return res.status(400).json({ message: "Invalid email or password" });
-  }
-
   try {
-    if (bcrypt.compare(password, car.password)) {
-      const accessToken = jwt.sign(
-        { ownersEmail: car.ownersEmail, isAdmin: car.isAdmin },
-        process.env.ACCESS_TOKEN_SECRET
-      );
-      res.json({ accessToken });
-    } else {
-      res.status(400).json({ message: "Invalid email or password" });
+    const car = await Car.findOne({ ownersEmail });
+    if (!car) {
+      return res.status(400).json({ message: "Invalid email" });
     }
+    console.log(car);
+    const isPasswordValid = await bcrypt.compare(password, car.password); // Use bcrypt to compare passwords
+    if (!isPasswordValid) {
+      // Password does not match
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // Password matches, generate and send access token
+    const accessToken = jwt.sign(
+      { ownersEmail: car.ownersEmail, isAdmin: car.isAdmin },
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.json({ accessToken });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal Server Error" });
