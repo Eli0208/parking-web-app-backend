@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Car = require("../models/car.js");
 
@@ -57,7 +56,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email" });
     }
     console.log(car);
-    const isPasswordValid = await bcrypt.compare(password, car.password); // Use bcrypt to compare passwords
+    const isPasswordValid = password === car.password; // Directly compare passwords
     if (!isPasswordValid) {
       // Password does not match
       return res.status(400).json({ message: "Invalid password" });

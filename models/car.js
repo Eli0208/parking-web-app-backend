@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const timeSchema = new mongoose.Schema({
   date: {
@@ -64,22 +63,6 @@ const carSchema = new mongoose.Schema({
     required: true,
     enum: ["Teaching", "Non-Teaching", "Admin"], // Restricting to specific values
   },
-});
-
-// Middleware to hash password before saving
-carSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(this.password, salt);
-    this.password = hash;
-    next();
-  } catch (error) {
-    return next(error); // Pass error to the next middleware
-  }
 });
 
 // Create the Car model
